@@ -1,0 +1,10 @@
+## Interface: 50001
+## Title: Dark.Raids
+## Author: Darkend / Singularity / Zenedar / EU
+## Version: 0.0.1
+## Notes: Raid Utilities
+## RequiredDeps: Dark.Raids
+
+markers.lua
+
+run.lua
