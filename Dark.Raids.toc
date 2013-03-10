@@ -5,6 +5,11 @@
 ## Notes: Raid Utilities
 ## RequiredDeps: Dark.Raids
 
+config.lua
 markers.lua
+
+unitCache.lua
+threatMeter.lua
+threatUi.lua
 
 run.lua
