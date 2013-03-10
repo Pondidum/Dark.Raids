@@ -10,10 +10,9 @@ local style = core.style
 local NUM_WORLD_RAID_MARKERS = NUM_WORLD_RAID_MARKERS
 local IsRaidMarkerActive = IsRaidMarkerActive
 
-local NUM_SPACERS = NUM_WORLD_RAID_MARKERS + 1
-local CONTAINER_HEIGHT = 32
+local NUM_SPACERS = NUM_WORLD_RAID_MARKERS - 1
 local SPACING = 4
-
+local PADDING = 0
 
 local rgbFromHex = function(hex)
 	local rhex, ghex, bhex = string.sub(hex, 1, 2), string.sub(hex, 3, 4), string.sub(hex, 5, 6)
@@ -54,22 +53,25 @@ local markers = {
 		local markers = {}
 		local container = CreateFrame("Frame", "DarkRaidWorldMarkers", UIParent)
 
-		container:SetPoint("TOPLEFT", Minimap, "BOTTOMLEFT", 0, 0)
-		container:SetPoint("TOPRIGHT", Minimap, "BOTTOMRIGHT", 0, 0)
-		container:SetHeight(CONTAINER_HEIGHT)
+		container:SetPoint("TOPLEFT", Minimap, "BOTTOMLEFT", 0, -10)
+		container:SetPoint("TOPRIGHT", Minimap, "BOTTOMRIGHT", 0, -10)
+
+		local buttonSize = (Minimap:GetWidth() - (NUM_SPACERS * SPACING)) / NUM_WORLD_RAID_MARKERS
+		container:SetHeight(buttonSize)
 
 		core.layout.init(container, {
 			marginLeft = SPACING,
 			marginRight = SPACING,
 			marginTop = SPACING,
 			marginBottom = SPACING,
-			defaultChildWidth = (container:GetWidth() - (NUM_SPACERS * SPACING)) / NUM_WORLD_RAID_MARKERS,
-			defaultChildHeight = CONTAINER_HEIGHT - SPACING - SPACING,
+			paddingLeft = PADDING,
+			paddingRight = PADDING,
+			paddingTop = PADDING,
+			paddingBottom = PADDING,
+			defaultChildWidth = buttonSize,
+			defaultChildHeight = buttonSize,
 			forceChildSize = true,
 		})
-
-		style.addBackground(container)
-		style.addShadow(container)
 
 		for i = 1, NUM_WORLD_RAID_MARKERS do
 			markers[i] = container.add(createButton(container, i))
@@ -96,7 +98,7 @@ local markers = {
 
 		local setVisibility = function()
 
-			if not IsInRaid() or (UnitIsGroupLeader("player") or UnitIsGroupAssistant("player")) then
+			if IsInGroup() and (not IsInRaid() or (UnitIsGroupLeader("player") or UnitIsGroupAssistant("player"))) then
 				container:Show()
 			else
 				container:Hide()
@@ -107,7 +109,6 @@ local markers = {
 		events.register("GROUP_ROSTER_UPDATE", nil, setVisibility)
 		events.register("PLAYER_ENTERING_WORLD", nil, setVisibility)
 		events.registerOnUpdate("DarkRaidWorldMarkers", onUpdate)
-
 
 	end,
 
