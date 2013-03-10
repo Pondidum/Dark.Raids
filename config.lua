@@ -9,3 +9,5 @@ local config = {
 		classColors = true,
 	}
 }
+
+ns.config = config
