@@ -34,7 +34,7 @@ local threatMeter = {
 
 		end
 
-		local threatTable, sortTable
+		local threatTable, sortTable = {}, nil
 		local topThreat =0
 		local tankGuid
 
@@ -46,19 +46,23 @@ local threatMeter = {
 				return
 			end
 
-			local isTanking, status, scaledPercent, rawPercent, threatValue = UnitDetailedThreatSituation(unitID, mobUnitID)
+			units.names[unitGuid] = UnitName(unitID)
 
-			if threatValue then
+			local isTanking, status, scaledPercent, rawPercent, threatValue = UnitDetailedThreatSituation(unitID, mobUnitID)
+			local useValue = scaledPercent
+
+			--print(UnitName(unitID), useValue, threatValue)
+			if useValue then
 				
-				if threatValue > topThreat then
-					topThreat = threatValue
+				if useValue > topThreat then
+					topThreat = useValue
 				end
 
 				if isTanking then
 					tankGuid = unitGuid
 				end
 
-				threatTable[unitGuid] = threatValue
+				threatTable[unitGuid] = useValue
 			else
 				threatTable[unitGuid] = -1
 			end
@@ -77,8 +81,8 @@ local threatMeter = {
 					end
 				else
 					for i = 1, GetNumSubgroupMembers() do
-						updateThreat(units.party, mob)
-						updateThreat(units.partyPets, mob)
+						updateThreat(units.party[i], mob)
+						updateThreat(units.partyPets[i], mob)
 						--updateThreat(ptID[i], mob)
 						--updateThreat(pptID[i], mob)
 					end
@@ -132,28 +136,37 @@ local threatMeter = {
 
 			local mobGuid = UnitGUID(mob)
 
-			threatTable = newTable()
+			threatTable = {}
 			threatTable[mobGuid] = -1
 
 			gatherThreatData(mob)
 			
 			local sortTable = getSortTable()
-			local iterator = function()
+
+			local result = {}
+
+			for i, guid in ipairs(sortTable) do
+				result[i] = {rank = i, name = units.names[guid], value = threatTable[guid]}
+			end
+
+			--[[
+			local result = function()
 				
 				local t = threatTable
 				
 				local j = 0
 				return function()
 					j = j + 1
-					local name = sortTable[j]
-					if name then
-						return j, name, t[name]
+					local guid = sortTable[j]
+					if guid then
+						return j, units.names[guid], t[guid]
 					end
 				end
 
 			end
-
-			onThreatUpdate(iterator)
+			]]
+			
+			onThreatUpdate(result)
 
 		end
 

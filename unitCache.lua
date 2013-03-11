@@ -16,8 +16,8 @@ local unitCache = {
 		end
 
 		for i = 1, 5 do
-			partyUnits[i] = string.format("raid%d", i)
-			partyPets[i] = string.format("raidpet%d", i)
+			partyUnits[i] = string.format("party%d", i)
+			partyPets[i] = string.format("partypet%d", i)
 		end
 
 		local this = {}
@@ -26,6 +26,8 @@ local unitCache = {
 		this.raidPets = raidPets
 		this.party = partyUnits
 		this.partyPets = partyPets
+
+		this.names = {}
 
 		return this
 
