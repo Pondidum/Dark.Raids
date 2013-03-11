@@ -2,6 +2,7 @@ local addon, ns = ...
 local config = ns.config.threat 
 
 local core = Dark.core
+local events = core.events
 local layout = core.layout
 local style = core.style
 local ui = core.ui
@@ -26,12 +27,31 @@ local threatUi = {
 			type = "STACK",
 			origin = "TOP",
 			autosize = true,
-			marginTop = config.rowHeight / 2,
-			marginBottom = config.rowHeight / 2,
+			marginTop = config.rowSpacing / 2,
+			marginBottom = config.rowSpacing / 2,
 		})
 
 		style.addBackground(container)
 		style.addShadow(container)
+
+		if config.toggleOnCombat then
+
+			local onEnterCombat = function()
+				container:Show()
+			end
+
+			local onExitCombat = function()
+				container:Hide()
+			end
+
+			events.register("PLAYER_REGEN_DISABLED", nil, onEnterCombat)
+			events.register("PLAYER_REGEN_ENABLED", nil, onExitCombat)
+
+			if not InCombatLockdown() then
+				onExitCombat()
+			end
+
+		end
 
 		local bars = {}
 
@@ -60,16 +80,37 @@ local threatUi = {
 
 		local onUpdate = function(result)
 
-			print("----------------")
+			for i, bar in ipairs(bars) do 
+
+				local set = result[i]
+
+				if set then
+
+					local class, classConst = UnitClass(set.name)
+					local color = RAID_CLASS_COLORS[classConst] or {r = 0.5, g = 0.5, b = 0.5}
+	
+					if not color then 
+						print(set.name, classConst)
+					end
+
+					bar:SetValue(set.value)
+					bar.value:SetText(round(set.value, 2))
+					bar.name:SetText(set.name)
+					bar:SetStatusBarColor(color.r, color.g, color.b)
+					bar:Show()
+
+				else
+
+					bar:Hide()
+
+				end
+
+			end
+
 			for i, set in ipairs(result) do 
 
 				local bar = bars[i]
-
-				print(set.index, set.name, set.value)
 				
-				bar:SetValue(set.value)
-				bar.value:SetText(round(set.value, 2))
-				bar.name:SetText(set.name)
 			end
 
 		end

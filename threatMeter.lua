@@ -19,7 +19,6 @@ local threatMeter = {
 			return {}	--maybe use weak table?
 		end
 
-		local threatSort = function(a, b) return threatTable[a] > threatTable[b] end
 
 		local threatUnitIDFindList = {"target", "targettarget"}
 		local findThreatMob = function()
@@ -35,6 +34,7 @@ local threatMeter = {
 		end
 
 		local threatTable, sortTable = {}, nil
+		local threatSort = function(a, b) return threatTable[a] > threatTable[b] end
 		local topThreat =0
 		local tankGuid
 
@@ -116,6 +116,7 @@ local threatMeter = {
 
 				if value ~= -1 then
 					sortTable[i] = guid
+					i = i + 1
 				end
 
 			end
@@ -170,7 +171,14 @@ local threatMeter = {
 
 		end
 
+		local onCombatChange = function()
+			onThreatUpdate({})
+		end
+
 		events.register("UNIT_THREAT_LIST_UPDATE", nil, onThreatListUpdated)
+		events.register("PLAYER_REGEN_ENABLED", nil, onCombatChange)
+		events.register("PLAYER_REGEN_DISABLED", nil, onCombatChange)
+
 	end,
 
 }

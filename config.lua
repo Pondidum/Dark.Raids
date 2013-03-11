@@ -7,6 +7,7 @@ local config = {
 		rowHeight = 14,
 		rowSpacing = 2,
 		classColors = true,
+		toggleOnCombat = true,
 	}
 }
 
