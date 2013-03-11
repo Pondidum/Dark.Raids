@@ -21,7 +21,7 @@ end
 
 local createButton = function(parent, index)
 
-	local button = CreateFrame("Button", nil, parent, "SecureActionButtonTemplate")
+	local button = CreateFrame("Button", "DarkRaidWorldMarkers"..index, parent, "ActionButtonTemplate, SecureActionButtonTemplate")
 
 	button:RegisterForClicks("AnyUp")
 	button:SetAttribute("type", "macro")
@@ -32,6 +32,7 @@ local createButton = function(parent, index)
 	button.text:SetAllPoints(button)
 	button.text:SetJustifyH("CENTER")
 
+	style.actionButton(button)
 	style.addBackground(button)
 	style.addShadow(button)
 
