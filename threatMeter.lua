@@ -1,5 +1,5 @@
 local addon, ns = ...
-local events = Dark.core.events
+local events = Dark.core.events.new()
 
 local threatMeter = {
 	
@@ -12,7 +12,7 @@ local threatMeter = {
 			inParty = IsInGroup()
 			inRaid = IsInRaid()
 		end
-		events.register("GROUP_ROSTER_UPDATE", nil, onGroupRosterUpdate)
+		events.register("GROUP_ROSTER_UPDATE", onGroupRosterUpdate)
 
 
 		local newTable = function()
@@ -116,6 +116,7 @@ local threatMeter = {
 
 				if value ~= -1 then
 					sortTable[i] = guid
+					i = i + 1
 				end
 
 			end
@@ -149,28 +150,11 @@ local threatMeter = {
 				result[i] = {rank = i, name = units.names[guid], value = threatTable[guid]}
 			end
 
-			--[[
-			local result = function()
-				
-				local t = threatTable
-				
-				local j = 0
-				return function()
-					j = j + 1
-					local guid = sortTable[j]
-					if guid then
-						return j, units.names[guid], t[guid]
-					end
-				end
-
-			end
-			]]
-			
 			onThreatUpdate(result)
 
 		end
 
-		events.register("UNIT_THREAT_LIST_UPDATE", nil, onThreatListUpdated)
+		events.register("UNIT_THREAT_LIST_UPDATE", onThreatListUpdated)
 	end,
 
 }

@@ -2,7 +2,7 @@ local addon, ns = ...
 local config = ns.config
 
 local core = Dark.core
-local events = core.events
+local events = core.events.new()
 local ui = core.ui
 local style = core.style
 
@@ -37,7 +37,7 @@ local createButton = function(parent, index)
 	style.addShadow(button)
 
 	local text = _G["WORLD_MARKER" .. index]
-	local i = text:find(" |cff")
+		local i = text:find(" |cff")
 
 	button.color = {rgbFromHex(text:sub(i+5, i+10))}
 	button.text:SetText(text:sub(1, i-1))
@@ -107,9 +107,9 @@ local markers = {
 
 		end
 
-		events.register("GROUP_ROSTER_UPDATE", nil, setVisibility)
-		events.register("PLAYER_ENTERING_WORLD", nil, setVisibility)
-		events.registerOnUpdate("DarkRaidWorldMarkers", onUpdate)
+		events.register("GROUP_ROSTER_UPDATE", setVisibility)
+		events.register("PLAYER_ENTERING_WORLD", setVisibility)
+		events.registerOnUpdate(onUpdate)
 
 	end,
 
