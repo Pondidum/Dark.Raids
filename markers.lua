@@ -23,7 +23,6 @@ local createButton = function(parent, index)
 
 	local button = CreateFrame("Button", "DarkRaidWorldMarkers"..index, parent, "ActionButtonTemplate, SecureActionButtonTemplate")
 
-	button:RegisterForClicks("AnyUp")
 	button:SetAttribute("type", "macro")
 	button:SetAttribute("macrotext1", "/wm " .. index)
 	button:SetAttribute("macrotext2", "/cwm " .. index)
@@ -37,7 +36,7 @@ local createButton = function(parent, index)
 	style.addShadow(button)
 
 	local text = _G["WORLD_MARKER" .. index]
-		local i = text:find(" |cff")
+	local i = text:find(" |cff")
 
 	button.color = {rgbFromHex(text:sub(i+5, i+10))}
 	button.text:SetText(text:sub(1, i-1))
@@ -99,8 +98,20 @@ local markers = {
 
 		local setVisibility = function()
 
-			if IsInGroup() and (not IsInRaid() or (UnitIsGroupLeader("player") or UnitIsGroupAssistant("player"))) then
+			if IsInGroup() or IsInRaid() then
+
 				container:Show()
+
+				local clicks = nil
+
+				if not IsInRaid() or (UnitIsGroupLeader("player") or UnitIsGroupAssistant("player")) then
+					clicks = "AnyUp"
+				end
+
+				for i, button in ipairs(markers) do
+					button:RegisterForClicks(clicks)
+				end
+
 			else
 				container:Hide()
 			end
