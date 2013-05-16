@@ -2,7 +2,7 @@ local addon, ns = ...
 local config = ns.config.threat 
 
 local core = Dark.core
-local events = core.events
+local events = core.events.new()
 local layout = core.layout
 local style = core.style
 local ui = core.ui
@@ -44,8 +44,8 @@ local threatUi = {
 				container:Hide()
 			end
 
-			events.register("PLAYER_REGEN_DISABLED", nil, onEnterCombat)
-			events.register("PLAYER_REGEN_ENABLED", nil, onExitCombat)
+			events.register("PLAYER_REGEN_DISABLED", onEnterCombat)
+			events.register("PLAYER_REGEN_ENABLED", onExitCombat)
 
 			if not InCombatLockdown() then
 				onExitCombat()
