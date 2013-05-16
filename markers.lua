@@ -11,7 +11,7 @@ local NUM_WORLD_RAID_MARKERS = NUM_WORLD_RAID_MARKERS
 local IsRaidMarkerActive = IsRaidMarkerActive
 
 local NUM_SPACERS = NUM_WORLD_RAID_MARKERS - 1
-local SPACING = 4
+local SPACING = 2
 local PADDING = 0
 
 local rgbFromHex = function(hex)
