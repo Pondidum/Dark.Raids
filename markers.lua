@@ -32,8 +32,6 @@ local createButton = function(parent, index)
 	button.text:SetJustifyH("CENTER")
 
 	style.actionButton(button)
-	style.addBackground(button)
-	style.addShadow(button)
 
 	local text = _G["WORLD_MARKER" .. index]
 	local i = text:find(" |cff")
