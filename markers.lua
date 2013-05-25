@@ -116,7 +116,7 @@ local markers = {
 
 		end
 
-		events.register("GROUP_ROSTER_UPDATE", setVisibility)
+		events.register("PARTY_LEADER_CHANGED", setVisibility)
 		events.register("PLAYER_ENTERING_WORLD", setVisibility)
 		events.registerOnUpdate(onUpdate)
 
