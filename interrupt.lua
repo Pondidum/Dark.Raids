@@ -122,10 +122,19 @@ local interrupt = {
 				this.setNotify(value)
 				print(string.format("Interrupt Announce: Whispering %s on interrupt.", value))
 			end,
+
+			help = {
+				enable = "Enables the interrupt announce.",
+				disable = "Disable the interrupt announce.",
+				channel = "The channel to announce to\n\tArg1: 'Channel Name'",
+				suffix = "A message to append to the announce\n\tArg1: 'suffix message'",
+				whisper = "",
+			},
 		}
 
 
 		slash.register("interrupt", slashHandler)
+		slash.register("int", slashHandler)
 
 		if config.enabled then
 			this.enable()
