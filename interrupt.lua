@@ -1,4 +1,5 @@
 local addon, ns = ...
+local config = ns.config.interrupt 
 
 local core = Dark.core
 local eventStore = core.events.new()
@@ -7,13 +8,6 @@ local slash = core.slash
 local interrupt = {
     
 	new = function()
-
-		local config = {
-			enabled = true,
-			channel = "say",
-			suffix = "",
-			notify = "",
-		}
 
 		local playerName = UnitName("player")
 

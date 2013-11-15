@@ -8,7 +8,15 @@ local config = {
 		rowSpacing = 1,
 		classColors = true,
 		toggleOnCombat = true,
-	}
+	},
+
+	interrupt = {
+		enabled = true,
+		channel = "say",
+		suffix = "",
+		notify = "",
+	},
+
 }
 
 ns.config = config
