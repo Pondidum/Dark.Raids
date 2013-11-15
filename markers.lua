@@ -11,7 +11,7 @@ local NUM_WORLD_RAID_MARKERS = NUM_WORLD_RAID_MARKERS
 local IsRaidMarkerActive = IsRaidMarkerActive
 
 local NUM_SPACERS = NUM_WORLD_RAID_MARKERS - 1
-local SPACING = 2
+local SPACING = 4
 local PADDING = 0
 
 local rgbFromHex = function(hex)
@@ -51,21 +51,26 @@ local markers = {
 		local markers = {}
 		local container = CreateFrame("Frame", "DarkRaidWorldMarkers", UIParent)
 
-		container:SetPoint("TOPLEFT", Minimap, "BOTTOMLEFT", 0, -10)
-		container:SetPoint("TOPRIGHT", Minimap, "BOTTOMRIGHT", 0, -10)
+		container:SetPoint("TOPLEFT", Minimap, "BOTTOMLEFT", 0, -50)
+		container:SetPoint("TOPRIGHT", Minimap, "BOTTOMRIGHT", 0, -50)
 
-		local buttonSize = (Minimap:GetWidth() - (NUM_SPACERS * SPACING)) / NUM_WORLD_RAID_MARKERS
+		local lastSize = Minimap:GetWidth()
+		local calculateSize = function() 
+			return (140 - (NUM_SPACERS * SPACING)) / NUM_WORLD_RAID_MARKERS
+		end
+
+		local buttonSize = calculateSize()
 		container:SetHeight(buttonSize)
 
 		core.layout.init(container, {
-			marginLeft = SPACING,
+			marginLeft = 0,
 			marginRight = SPACING,
-			marginTop = SPACING,
-			marginBottom = SPACING,
+			marginTop = 0,
+			marginBottom = 0,
 			paddingLeft = PADDING,
-			paddingRight = PADDING,
+			paddingRight = 0,
 			paddingTop = PADDING,
-			paddingBottom = PADDING,
+			paddingBottom = 0,
 			defaultChildWidth = buttonSize,
 			defaultChildHeight = buttonSize,
 			forceChildSize = true,
@@ -92,6 +97,18 @@ local markers = {
 					mark.active = isActive
 				end
 			end
+
+			local currentSize = Minimap:GetWidth()
+
+			if currentSize ~= lastSize then
+				local newSize = calculateSize()
+				container.layout.defaultChildHeight = newSize
+				container.layout.defaultChildWidth = newSize
+				container.performLayout()
+
+				lastSize = currentSize
+			end
+
 		end
 
 		local setVisibility = function()
