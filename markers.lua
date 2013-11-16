@@ -10,9 +10,6 @@ local style = core.style
 local NUM_WORLD_RAID_MARKERS = NUM_WORLD_RAID_MARKERS
 local IsRaidMarkerActive = IsRaidMarkerActive
 
-local NUM_SPACERS = NUM_WORLD_RAID_MARKERS - 1
-local SPACING = 4
-local PADDING = 0
 
 local rgbFromHex = function(hex)
 	local rhex, ghex, bhex = string.sub(hex, 1, 2), string.sub(hex, 3, 4), string.sub(hex, 5, 6)
@@ -44,6 +41,8 @@ local createButton = function(parent, index)
 end
 
 
+local SPACING = 4 
+
 local markers = {
 	
 	new = function() 
@@ -51,34 +50,43 @@ local markers = {
 		local markers = {}
 		local container = CreateFrame("Frame", "DarkRaidWorldMarkers", UIParent)
 
-		container:SetPoint("TOPLEFT", Minimap, "BOTTOMLEFT", 0, -50)
-		container:SetPoint("TOPRIGHT", Minimap, "BOTTOMRIGHT", 0, -50)
-
-		local lastSize = Minimap:GetWidth()
-		local calculateSize = function() 
-			return (140 - (NUM_SPACERS * SPACING)) / NUM_WORLD_RAID_MARKERS
-		end
-
-		local buttonSize = calculateSize()
-		container:SetHeight(buttonSize)
+		container:SetPoint("TOPLEFT", MinimapCluster, "BOTTOMLEFT", 0, -5)
+		container:SetPoint("TOPRIGHT", MinimapCluster, "BOTTOMRIGHT", 0, -5)
+ 
+		local startingButtonSize = 24
+		container:SetHeight(startingButtonSize)
 
 		core.layout.init(container, {
 			marginLeft = 0,
 			marginRight = SPACING,
 			marginTop = 0,
 			marginBottom = 0,
-			paddingLeft = PADDING,
+			paddingLeft = 0,
 			paddingRight = 0,
-			paddingTop = PADDING,
+			paddingTop = 0,
 			paddingBottom = 0,
-			defaultChildWidth = buttonSize,
-			defaultChildHeight = buttonSize,
+			defaultChildWidth = startingButtonSize,
+			defaultChildHeight = startingButtonSize,
 			forceChildSize = true,
 		})
 
 		for i = 1, NUM_WORLD_RAID_MARKERS do
 			markers[i] = container.add(createButton(container, i))
 		end
+		
+		MinimapCluster:SetScript("OnSizeChanged", function(self, width, h)
+
+			local numSpacers = NUM_WORLD_RAID_MARKERS - 1
+
+			local newSize = (width - (numSpacers * SPACING)) / NUM_WORLD_RAID_MARKERS
+
+			container:SetHeight(newSize)
+			container.layout.defaultChildHeight = newSize
+			container.layout.defaultChildWidth = newSize
+
+			container.performLayout()
+
+		end)
 
 		local onUpdate = function()
 
@@ -98,18 +106,8 @@ local markers = {
 				end
 			end
 
-			local currentSize = Minimap:GetWidth()
-
-			if currentSize ~= lastSize then
-				local newSize = calculateSize()
-				container.layout.defaultChildHeight = newSize
-				container.layout.defaultChildWidth = newSize
-				container.performLayout()
-
-				lastSize = currentSize
-			end
-
 		end
+
 
 		local setVisibility = function()
 
