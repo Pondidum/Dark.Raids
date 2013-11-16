@@ -146,4 +146,4 @@ local interrupt = {
 
 }
 
-interrupt.new()
+ns.interrupt = interrupt
