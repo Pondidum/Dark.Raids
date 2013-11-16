@@ -17,6 +17,19 @@ local config = {
 		notify = "",
 	},
 
+
+	cooldowns = {
+		enabled = true,
+		channel = "yell",
+
+		SHAMAN = {
+			["Enhancement"] = {
+				[120668] = "%s Up.", -- stormlash
+				[108280] = "%s Up.", -- healing tide
+			},
+		},
+	},
+
 }
 
 ns.config = config
