@@ -19,7 +19,8 @@ local config = {
 
 
 	cooldowns = {
-		channel = "say",
+		enabled = true,
+		channel = "yell",
 
 		SHAMAN = {
 			["Enhancement"] = {
