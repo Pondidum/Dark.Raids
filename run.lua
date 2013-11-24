@@ -1,5 +1,8 @@
 local addon, ns = ...
 
+local core = Dark.core
+local events = core.events.new()
+
 local run = function()
 	ns.markers.new()
 	ns.threatUi.new()
@@ -7,5 +10,4 @@ local run = function()
 	ns.cooldowns.new()
 end
 
-run()
-Dark.raids = ns
+events.register("PLAYER_ENTERING_WORLD", run)
