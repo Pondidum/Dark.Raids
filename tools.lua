@@ -8,11 +8,11 @@ local SPACING = 4
 local PADDING = 0
 
 local tools = {
-	
+
 	new = function()
 
 		local height = DarkRaidWorldMarkers:GetHeight()
-		
+
 		local container = CreateFrame("Frame", "DarkRaidTools", UIParent)
 		container:SetPoint("TOPLEFT", DarkRaidWorldMarkers, "BOTTOMLEFT", 0, -10)
 		container:SetPoint("TOPRIGHT", DarkRaidWorldMarkers, "BOTTOMRIGHT", 0, -10)

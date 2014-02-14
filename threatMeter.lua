@@ -2,7 +2,7 @@ local addon, ns = ...
 local events = Dark.core.events.new()
 
 local threatMeter = {
-	
+
 	new = function(onThreatUpdate)
 
 		local units = ns.unitCache.new()
@@ -22,7 +22,7 @@ local threatMeter = {
 
 		local threatUnitIDFindList = {"target", "targettarget"}
 		local findThreatMob = function()
-			
+
 			for i, mob in ipairs(threatUnitIDFindList) do
 
 				if UnitExists(mob) and not UnitIsPlayer(mob) and UnitCanAttack("player", mob) and UnitHealth(mob) > 0 then
@@ -53,7 +53,7 @@ local threatMeter = {
 
 			--print(UnitName(unitID), useValue, threatValue)
 			if useValue then
-				
+
 				if useValue > topThreat then
 					topThreat = useValue
 				end
@@ -141,7 +141,7 @@ local threatMeter = {
 			threatTable[mobGuid] = -1
 
 			gatherThreatData(mob)
-			
+
 			local sortTable = getSortTable()
 
 			local result = {}

@@ -1,5 +1,5 @@
 local addon, ns = ...
-local config = ns.config.threat 
+local config = ns.config.threat
 
 local core = Dark.core
 local events = core.events.new()
@@ -80,7 +80,7 @@ local threatUi = {
 
 		local onUpdate = function(result)
 
-			for i, bar in ipairs(bars) do 
+			for i, bar in ipairs(bars) do
 
 				local set = result[i]
 
@@ -88,8 +88,8 @@ local threatUi = {
 
 					local class, classConst = UnitClass(set.name)
 					local color = RAID_CLASS_COLORS[classConst] or {r = 0.5, g = 0.5, b = 0.5}
-	
-					if not color then 
+
+					if not color then
 						print(set.name, classConst)
 					end
 
@@ -107,10 +107,10 @@ local threatUi = {
 
 			end
 
-			for i, set in ipairs(result) do 
+			for i, set in ipairs(result) do
 
 				local bar = bars[i]
-				
+
 			end
 
 		end

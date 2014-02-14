@@ -1,32 +1,32 @@
 local addon, ns = ...
-local config = ns.config.interrupt 
+local config = ns.config.interrupt
 
 local core = Dark.core
 local eventStore = core.events.new()
 local slash = core.slash
 
 local interrupt = {
-    
+
 	new = function()
 
 		local playerName = UnitName("player")
 
 		local shouldAnnounce = {
-			say = function() 
-				return true 
+			say = function()
+				return true
 			end,
 
-			party = function() 
-				return UnitInParty("player") and GetNumPartyMembers() > 0 
+			party = function()
+				return UnitInParty("player") and GetNumPartyMembers() > 0
 			end,
 
-			raid = function() 
-				return UnitInRaid("player") 
+			raid = function()
+				return UnitInRaid("player")
 			end,
 		}
 
 		local messages = {
-			
+
 			SPELL_INTERRUPT = function(targetSpellID, sourceSpellID)
 				return "Interrupted " .. GetSpellLink(targetSpellID) .. "."
 			end,
@@ -49,7 +49,7 @@ local interrupt = {
 			end
 
 			if shouldAnnounce[config.channel] == nil then
-				return 
+				return
 			end
 
 			local message = messages[eventType](extraskillID, spellID) .. " " .. config.suffix
@@ -57,7 +57,7 @@ local interrupt = {
 			SendChatMessage(message, config.channel)
 
 			if config.notify ~= nil and config.notify ~= "" then
-				SendChatMessage(message, "WHISPER", nil, config.notify)				
+				SendChatMessage(message, "WHISPER", nil, config.notify)
 			end
 
 
@@ -80,7 +80,7 @@ local interrupt = {
 		end
 
 		this.setSuffix = function(value)
-			config.suffix = value 
+			config.suffix = value
 		end
 
 		this.setNotify = function(value)

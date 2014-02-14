@@ -41,18 +41,18 @@ local createButton = function(parent, index)
 end
 
 
-local SPACING = 4 
+local SPACING = 4
 
 local markers = {
-	
-	new = function() 
+
+	new = function()
 
 		local markers = {}
 		local container = CreateFrame("Frame", "DarkRaidWorldMarkers", UIParent)
 
 		container:SetPoint("TOPLEFT", MinimapCluster, "BOTTOMLEFT", 0, -5)
 		container:SetPoint("TOPRIGHT", MinimapCluster, "BOTTOMRIGHT", 0, -5)
- 
+
 		local startingButtonSize = 24
 		container:SetHeight(startingButtonSize)
 
@@ -73,7 +73,7 @@ local markers = {
 		for i = 1, NUM_WORLD_RAID_MARKERS do
 			markers[i] = container.add(createButton(container, i))
 		end
-		
+
 		MinimapCluster:SetScript("OnSizeChanged", function(self, width, h)
 
 			local numSpacers = NUM_WORLD_RAID_MARKERS - 1

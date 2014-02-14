@@ -1,7 +1,7 @@
 local addon, ns = ...
 
 local config = {
-	
+
 	threat = {
 		rowCount = 5,
 		rowHeight = 14,

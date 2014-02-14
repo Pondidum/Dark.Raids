@@ -1,7 +1,7 @@
 local addon, ns = ...
 
 local unitCache = {
-	
+
 	new = function()
 
 		local raidUnits = {}
