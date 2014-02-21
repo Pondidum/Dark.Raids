@@ -4,6 +4,7 @@ local config = ns.config.interrupt
 local core = Dark.core
 local eventStore = core.events.new()
 local slash = core.slash
+local options = core.options
 
 local interrupt = {
 
@@ -63,9 +64,7 @@ local interrupt = {
 
 		end
 
-
 		local this = {}
-
 
 		this.enable = function()
 			eventStore.register("COMBAT_LOG_EVENT_UNFILTERED", onCombatLogUnfiltered)
@@ -73,6 +72,10 @@ local interrupt = {
 
 		this.disable = function()
 			eventStore.unregister("COMBAT_LOG_EVENT_UNFILTERED")
+		end
+
+		this.isEnabled = function()
+			return eventStore.isRegistered("COMBAT_LOG_EVENT_UNFILTERED")
 		end
 
 		this.setChannel = function(value)
@@ -122,23 +125,108 @@ local interrupt = {
 				this.setNotify(value)
 				print(string.format("Interrupt Announce: Whispering %s on interrupt.", value))
 			end,
+		}
 
-			help = {
-				enable = "Enables the interrupt announce.",
-				disable = "Disable the interrupt announce.",
-				channel = "The channel to announce to\n\tArg1: 'Channel Name'",
-				suffix = "A message to append to the announce\n\tArg1: 'suffix message'",
-				whisper = "",
-			},
+		local helpHandler = {
+			enable = "Enables the interrupt announce.",
+			disable = "Disable the interrupt announce.",
+			channel = "The channel to announce to\n\tArg1: 'Channel Name'",
+			suffix = "A message to append to the announce\n\tArg1: 'suffix message'",
+			whisper = "",
 		}
 
 
-		slash.register("interrupt", slashHandler)
-		slash.register("int", slashHandler)
+		slash.register("interrupt", slashHandler, helpHandler)
+		slash.register("int", slashHandler, helpHandler)
 
 		if config.enabled then
 			this.enable()
 		end
+
+		local inputOffset = 5
+		local groupSpacing = 20
+
+		options.register("Interrupt", {
+			description = "An Interrupt announcer.",
+
+			children = {
+				{
+					type = "label",
+					name = "$parentEnabledLabel",
+					points = {
+						{ "TOPLEFT" , "$parent", "TOPLEFT", 10, -10 },
+					},
+					text = "Enabled",
+				},
+				{
+					type = "checkbox",
+					template = "OptionsCheckButtonTemplate",
+					name = "$parentEnabled",
+					points = {
+						{ "TOP", "$parentEnabledLabel", "BOTTOM", 0, -5 },
+						{ "LEFT", "$parentEnabledLabel", "LEFT", inputOffset, 0 },
+					},
+				},
+				{
+					type = "label",
+					name = "$parentChannelLabel",
+					points = {
+						{ "TOP", "$parentEnabled", "BOTTOM", 0, -groupSpacing},
+						{ "LEFT", "$parentEnabledLabel", "LEFT", 0, 0 },
+					},
+					text = "Announce to Channel:"
+				},
+				{
+					type = "dropdown",
+					name = "$parentChannel",
+					points = {
+						{ "TOP", "$parentChannelLabel", "BOTTOM", 0, -5 },
+						{ "LEFT", "$parentEnabledLabel", "LEFT", inputOffset-20, 0 },
+					},
+					items = {
+						PARTY = "Party",
+						SAY = "Say",
+						RAID = "Raid",
+					}
+				},
+				{
+					type = "label",
+					name = "$parentSuffixLabel",
+					points = {
+						{ "TOP", "$parentChannel", "BOTTOM", 0, -groupSpacing},
+						{ "LEFT", "$parentEnabledLabel", "LEFT", 0, 0 },
+					},
+					text = "Suffix messages with:"
+				},
+				{
+					type = "textbox",
+					name = "$parentSuffix",
+					points = {
+						{ "TOP", "$parentSuffixLabel", "BOTTOM", 0, -5},
+						{ "LEFT", "$parentEnabledLabel", "LEFT", inputOffset, 0 },
+					},
+					size = { 250, 20 },
+				},
+				{
+					type = "label",
+					name = "$parentWhisperLabel",
+					points = {
+						{ "TOP", "$parentSuffix", "BOTTOM", 0, -groupSpacing},
+						{ "LEFT", "$parentEnabledLabel", "LEFT", 0, 0 },
+					},
+					text = "Whisper a player on successful interrupt:"
+				},
+				{
+					type = "textbox",
+					name = "$parentWhisper",
+					points = {
+						{ "TOP", "$parentWhisperLabel", "BOTTOM", 0, -5},
+						{ "LEFT", "$parentEnabledLabel", "LEFT", inputOffset, 0 },
+					},
+					size = { 150, 20 },
+				},
+			},
+		})
 
 		return this
 
