@@ -12,7 +12,7 @@ local config = {
 
 	interrupt = {
 		enabled = true,
-		channel = "say",
+		channel = "SAY",
 		suffix = "",
 		notify = "",
 	},

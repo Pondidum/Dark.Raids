@@ -13,15 +13,15 @@ local interrupt = {
 		local playerName = UnitName("player")
 
 		local shouldAnnounce = {
-			say = function()
+			SAY = function()
 				return true
 			end,
 
-			party = function()
+			PARTY = function()
 				return UnitInParty("player") and GetNumPartyMembers() > 0
 			end,
 
-			raid = function()
+			RAID = function()
 				return UnitInRaid("player")
 			end,
 		}
@@ -79,65 +79,28 @@ local interrupt = {
 		end
 
 		this.setChannel = function(value)
-			config.channel = string.lower(value)
+			config.channel = string.upper(value)
+		end
+
+		this.getChannel = function()
+			return string.upper(config.channel)
 		end
 
 		this.setSuffix = function(value)
 			config.suffix = value
 		end
 
+		this.getSuffix = function()
+			return config.suffix
+		end
+
 		this.setNotify = function(value)
 			config.notify = value
 		end
 
-		--[[
-
-			/dark interrupt enable
-			/dark interrupt disable
-			/dark interrupt channel party
-			/dark interrupt suffix "wrinkle next"
-			/dark interrupt whisper wrinkle
-
-		]]--
-		local slashHandler = {
-
-			enable = function()
-				this.enable()
-				print("Interrupt Announce: Enabled.")
-			end,
-
-			disable = function()
-				this.disable()
-				print("Interrupt Announce: Disabled.")
-			end,
-
-			channel = function(value)
-				this.setChannel(value)
-				print(string.format("Interrupt Announce: Annoncing to %s.", value))
-			end,
-
-			suffix = function(value)
-				this.setSuffix(value)
-				print(string.format("Interrupt Announce: Appending messages with '%s'.", value))
-			end,
-
-			whisper = function(value)
-				this.setNotify(value)
-				print(string.format("Interrupt Announce: Whispering %s on interrupt.", value))
-			end,
-		}
-
-		local helpHandler = {
-			enable = "Enables the interrupt announce.",
-			disable = "Disable the interrupt announce.",
-			channel = "The channel to announce to\n\tArg1: 'Channel Name'",
-			suffix = "A message to append to the announce\n\tArg1: 'suffix message'",
-			whisper = "",
-		}
-
-
-		slash.register("interrupt", slashHandler, helpHandler)
-		slash.register("int", slashHandler, helpHandler)
+		this.getNotify = function()
+			return config.notify
+		end
 
 		if config.enabled then
 			this.enable()
@@ -166,6 +129,18 @@ local interrupt = {
 						{ "TOP", "$parentEnabledLabel", "BOTTOM", 0, -5 },
 						{ "LEFT", "$parentEnabledLabel", "LEFT", inputOffset, 0 },
 					},
+					actions = {
+						save = function(self)
+							if self:GetChecked() then
+								this.enable()
+							else
+								this.disable()
+							end
+						end,
+						load = function(self)
+							self:SetChecked(this.isEnabled())
+						end,
+					}
 				},
 				{
 					type = "label",
@@ -187,6 +162,15 @@ local interrupt = {
 						PARTY = "Party",
 						SAY = "Say",
 						RAID = "Raid",
+					},
+					actions = {
+						save = function(self)
+							this.setChannel(UIDropDownMenu_GetSelectedValue(self))
+						end,
+						load = function(self)
+							UIDropDownMenu_SetSelectedValue(self, this.getChannel())
+							UIDropDownMenu_SetText(self, this.getChannel())
+						end,
 					}
 				},
 				{
@@ -206,6 +190,14 @@ local interrupt = {
 						{ "LEFT", "$parentEnabledLabel", "LEFT", inputOffset, 0 },
 					},
 					size = { 250, 20 },
+					actions = {
+						save = function(self)
+							this.setSuffix(self:GetText())
+						end,
+						load = function(self)
+							self:SetText(this.getSuffix())
+						end,
+					}
 				},
 				{
 					type = "label",
@@ -224,6 +216,14 @@ local interrupt = {
 						{ "LEFT", "$parentEnabledLabel", "LEFT", inputOffset, 0 },
 					},
 					size = { 150, 20 },
+					actions = {
+						save = function(self)
+							this.setNotify(self:GetText())
+						end,
+						load = function(self)
+							self:SetText(this.getNotify())
+						end,
+					}
 				},
 			},
 		})
