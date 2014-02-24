@@ -68,7 +68,7 @@ local interrupt = {
 
 		end
 
-		local this = {}
+		local this = {
 
 			enable = function()
 				eventStore.register("COMBAT_LOG_EVENT_UNFILTERED", onCombatLogUnfiltered)
