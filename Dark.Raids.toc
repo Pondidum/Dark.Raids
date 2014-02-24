@@ -12,6 +12,7 @@ unitCache.lua
 threatMeter.lua
 threatUi.lua
 interrupt.lua
+interrupt.options.lua
 cooldowns.lua
 
 run.lua
