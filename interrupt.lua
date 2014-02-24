@@ -65,42 +65,43 @@ local interrupt = {
 
 		local this = {}
 
-		this.enable = function()
-			eventStore.register("COMBAT_LOG_EVENT_UNFILTERED", onCombatLogUnfiltered)
-		end
+			enable = function()
+				eventStore.register("COMBAT_LOG_EVENT_UNFILTERED", onCombatLogUnfiltered)
+			end,
 
-		this.disable = function()
-			eventStore.unregister("COMBAT_LOG_EVENT_UNFILTERED")
-		end
+			disable = function()
+				eventStore.unregister("COMBAT_LOG_EVENT_UNFILTERED")
+			end,
 
-		this.isEnabled = function()
-			return eventStore.isRegistered("COMBAT_LOG_EVENT_UNFILTERED")
-		end
+			isEnabled = function()
+				return eventStore.isRegistered("COMBAT_LOG_EVENT_UNFILTERED")
+			end,
 
-		this.setChannel = function(value)
-			config.channel = string.upper(value)
-		end
+			setChannel = function(value)
+				config.channel = string.upper(value)
+			end,
 
-		this.getChannel = function()
-			return string.upper(config.channel)
-		end
+			getChannel = function()
+				return string.upper(config.channel)
+			end,
 
-		this.setSuffix = function(value)
-			config.suffix = value
-		end
+			setSuffix = function(value)
+				config.suffix = value
+			end,
 
-		this.getSuffix = function()
-			return config.suffix
-		end
+			getSuffix = function()
+				return config.suffix
+			end,
 
-		this.setNotify = function(value)
-			config.notify = value
-		end
+			setNotify = function(value)
+				config.notify = value
+			end,
 
-		this.getNotify = function()
-			return config.notify
-		end
-
+			getNotify = function()
+				return config.notify
+			end,
+		}
+		
 		if config.enabled then
 			this.enable()
 		end
