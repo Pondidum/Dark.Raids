@@ -133,3 +133,5 @@ local interruptOptions = {
 	end,
 
 }
+
+ns.interruptOptions = interruptOptions
