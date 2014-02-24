@@ -5,6 +5,11 @@ local core = Dark.core
 local eventStore = core.events.new()
 local slash = core.slash
 
+local UnitInParty = UnitInParty
+local UnitInRaid = UnitInRaid
+local GetNumPartyMembers = GetNumPartyMembers
+local SendChatMessage = SendChatMessage
+
 local interrupt = {
 
 	new = function()
@@ -101,7 +106,7 @@ local interrupt = {
 				return config.notify
 			end,
 		}
-		
+
 		if config.enabled then
 			this.enable()
 		end
