@@ -14,4 +14,4 @@ end
 
 ns.markers.new()
 
-events.register("PLAYER_ENTERING_WORLD", run)
+events.register("PLAYER_LOGIN", run)
