@@ -6,6 +6,7 @@ local events = core.events.new()
 local layout = core.layout
 local style = core.style
 local ui = core.ui
+local colors = core.colors
 
 local round = function(number, decimals)
 	if not decimals then decimals = 0 end
@@ -87,7 +88,7 @@ local threatUi = {
 				if set then
 
 					local class, classConst = UnitClass(set.name)
-					local color = RAID_CLASS_COLORS[classConst] or {r = 0.5, g = 0.5, b = 0.5}
+					local color = colors.class[classConst] or {r = 0.5, g = 0.5, b = 0.5}
 
 					if not color then
 						print(set.name, classConst)
