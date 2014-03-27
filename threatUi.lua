@@ -88,7 +88,7 @@ local threatUi = {
 				if set then
 
 					local class, classConst = UnitClass(set.name)
-					local color = colors.class[classConst] or {r = 0.5, g = 0.5, b = 0.5}
+					local color = colors.class[classConst] or {0.5, 0.5, 0.5}
 
 					if not color then
 						print(set.name, classConst)
@@ -97,7 +97,7 @@ local threatUi = {
 					bar:SetValue(set.value)
 					bar.value:SetText(round(set.value, 2))
 					bar.name:SetText(set.name)
-					bar:SetStatusBarColor(color.r, color.g, color.b)
+					bar:SetStatusBarColor(unpack(color))
 					bar:Show()
 
 				else
