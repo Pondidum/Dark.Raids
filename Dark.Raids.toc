@@ -6,6 +6,8 @@
 ## RequiredDeps: Dark.Raids
 
 config.lua
+initialise.lua
+
 markers.lua
 
 unitCache.lua
