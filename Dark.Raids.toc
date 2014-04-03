@@ -8,6 +8,8 @@
 config.lua
 initialise.lua
 
+unitCache.lua
+
 features\interrupt\interrupt.lua
 features\interrupt\interrupt.options.lua
 
@@ -16,7 +18,6 @@ features\threat\threatUi.lua
 
 markers.lua
 
-unitCache.lua
 cooldowns.lua
 
 run.lua
