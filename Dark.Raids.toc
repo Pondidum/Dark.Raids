@@ -16,8 +16,7 @@ features\interrupt\interrupt.options.lua
 features\threat\threatMeter.lua
 features\threat\threatUi.lua
 
-markers.lua
-
-cooldowns.lua
+features\markers.lua
+features\cooldowns.lua
 
 run.lua
