@@ -11,11 +11,12 @@ initialise.lua
 features\interrupt\interrupt.lua
 features\interrupt\interrupt.options.lua
 
+features\threat\threatMeter.lua
+features\threat\threatUi.lua
+
 markers.lua
 
 unitCache.lua
-threatMeter.lua
-threatUi.lua
 cooldowns.lua
 
 run.lua
