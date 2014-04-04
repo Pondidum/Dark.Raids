@@ -1,13 +1,12 @@
 local addon, ns = ...
 
-local core = Dark.core
-local options = core.options
+local options = ns.lib.options
 
 local inputOffset = 5
 local groupSpacing = 20
 
 local interruptOptions = {
-	
+
 	new = function(interruptController)
 
 		options.register("Interrupt", {
