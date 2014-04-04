@@ -14,6 +14,7 @@ local initialise = function()
 		fonts = core.fonts,
 		colours = core.colors,
 		textures = core.textures,
+		slash = core.slash,
 	}
 
 end

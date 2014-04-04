@@ -1,9 +1,8 @@
 local addon, ns = ...
 local config = ns.config.interrupt
 
-local core = Dark.core
-local eventStore = core.events.new()
-local slash = core.slash
+local eventStore = ns.lib.events.new()
+local slash = ns.lib.slash
 
 local UnitInParty = UnitInParty
 local UnitInRaid = UnitInRaid
