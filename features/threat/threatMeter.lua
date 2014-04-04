@@ -1,5 +1,5 @@
 local addon, ns = ...
-local events = Dark.core.events.new()
+local events = ns.lib.events.new()
 
 local threatMeter = {
 
