@@ -142,4 +142,4 @@ local markers = {
 
 }
 
-ns.markers = markers
+ns.features.markers = markers.new

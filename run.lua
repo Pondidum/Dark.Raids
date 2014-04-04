@@ -3,7 +3,8 @@ local addon, ns = ...
 local core = Dark.core
 local events = core.events.new()
 
-local run = function()
+local onLogin = function()
+
 	ns.threatUi.new()
 	ns.cooldowns.new()
 
@@ -12,6 +13,15 @@ local run = function()
 
 end
 
-ns.markers.new()
 
-events.register("PLAYER_LOGIN", run)
+local run = function()
+
+	events.register("PLAYER_LOGIN", onLogin)
+
+	for name, feature in pairs(ns.features) do
+		feature()
+	end
+
+end
+
+run()
