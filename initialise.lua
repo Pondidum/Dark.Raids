@@ -13,6 +13,7 @@ local initialise = function()
 		layout = core.layout,
 		fonts = core.fonts,
 		colours = core.colors,
+		textures = core.textures,
 	}
 
 end

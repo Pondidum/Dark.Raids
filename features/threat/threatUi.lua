@@ -1,12 +1,12 @@
 local addon, ns = ...
 local config = ns.config.threat
 
-local core = Dark.core
-local events = core.events.new()
-local layout = core.layout
-local style = core.style
-local ui = core.ui
-local colors = core.colors
+local events = ns.lib.events.new()
+local layout = ns.lib.layout
+local style = ns.lib.style
+local ui = ns.lib.ui
+local colors = ns.lib.colors
+local textures = ns.lib.textures
 
 local round = function(number, decimals)
 	if not decimals then decimals = 0 end
@@ -59,7 +59,7 @@ local threatUi = {
 		for i = 1, config.rowCount do
 
 			local bar = CreateFrame("StatusBar", "DarkuiRaidsThreat"..i, container)
-			bar:SetStatusBarTexture(core.textures.normal)
+			bar:SetStatusBarTexture(textures.normal)
 			bar:SetHeight(config.rowHeight)
 			bar:SetMinMaxValues(0, 100)
 
