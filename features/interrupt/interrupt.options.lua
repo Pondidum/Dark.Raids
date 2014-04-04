@@ -7,7 +7,7 @@ local groupSpacing = 20
 
 local interruptOptions = {
 
-	new = function(interruptController)
+	register = function(interruptController)
 
 		options.register("Interrupt", {
 			description = "An Interrupt announcer.",
@@ -133,4 +133,4 @@ local interruptOptions = {
 
 }
 
-ns.interruptOptions = interruptOptions
+ns.features.interrupt.options = interruptOptions

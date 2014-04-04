@@ -116,4 +116,4 @@ local interrupt = {
 
 }
 
-ns.interrupt = interrupt
+ns.features.interrupt.controller = interrupt
