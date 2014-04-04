@@ -1,15 +1,14 @@
 local addon, ns = ...
 local config = ns.config.cooldowns
 
-local core = Dark.core
-local events = core.events.new()
+local events = ns.lib.events.new()
 
 local cooldowns = {
-	
-	new = function() 
+
+	new = function()
 
 		local playerName = UnitName("player")
-		local specConfig 
+		local specConfig
 
 		local onSpecChanged = function()
 
@@ -31,7 +30,7 @@ local cooldowns = {
 		end
 
 		local onCombatLogUnfiltered = function(self, event, ...)
-			
+
 			if specConfig == nil then
 				return
 			end
@@ -46,23 +45,23 @@ local cooldowns = {
 				return
 			end
 
-			local message = specConfig[spellID] 
+			local message = specConfig[spellID]
 
 			if message == nil then
 				return
 			end
 
 
-			SendChatMessage(string.format(message, arg1), config.channel)	
+			SendChatMessage(string.format(message, arg1), config.channel)
 
 		end
 
 		local this = {}
 
 		this.enable = function()
- 
+
 			onSpecChanged()
-			
+
 			events.register("ACTIVE_TALENT_GROUP_CHANGED", onSpecChanged)
 			events.register("COMBAT_LOG_EVENT_UNFILTERED", onCombatLogUnfiltered)
 
@@ -76,7 +75,7 @@ local cooldowns = {
 			events.unregister("COMBAT_LOG_EVENT_UNFILTERED")
 
 		end
-		
+
 		if config.enabled then
 			this.enable()
 		end
