@@ -12,13 +12,16 @@ local onLogin = function()
 
 end
 
-
 local run = function()
 
 	events.register("PLAYER_LOGIN", onLogin)
 
 	for name, feature in pairs(ns.features) do
-		feature()
+
+		if type(feature) == "function" then
+			feature()
+		end
+
 	end
 
 end

@@ -2,7 +2,10 @@ local addon, ns = ...
 
 local initialise = function()
 
-	ns.features = {}
+	ns.features = {
+		threat = {},
+		interrupt = {},
+	}
 
 	local core = Dark.core
 
