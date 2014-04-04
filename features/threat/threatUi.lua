@@ -15,7 +15,7 @@ end
 
 local threatUi = {
 
-	new = function()
+	new = function(model)
 
 		local container = CreateFrame("Frame", "DarkuiRaidsThreat", UIParent)
 
@@ -116,7 +116,7 @@ local threatUi = {
 
 		end
 
-		local meter = ns.threatMeter.new(onUpdate)
+		model.onThreatUpdate = onUpdate
 
 		return container
 
@@ -124,4 +124,4 @@ local threatUi = {
 
 }
 
-ns.threatUi = threatUi
+ns.features.threat.ui = threatUi

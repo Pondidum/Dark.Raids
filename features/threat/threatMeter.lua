@@ -3,9 +3,10 @@ local events = ns.lib.events.new()
 
 local threatMeter = {
 
-	new = function(onThreatUpdate)
+	new = function(cache)
 
-		local units = ns.unitCache.new()
+		local this = {}
+		local units = cache
 		local inParty, inRaid = false, false
 
 		local onGroupRosterUpdate = function()
@@ -150,20 +151,21 @@ local threatMeter = {
 				result[i] = {rank = i, name = units.names[guid], value = threatTable[guid]}
 			end
 
-			onThreatUpdate(result)
+			this.onThreatUpdate(result)
 
 		end
 
 		local onCombatChange = function()
-			onThreatUpdate({})
+			this.onThreatUpdate({})
 		end
 
 		events.register("UNIT_THREAT_LIST_UPDATE", onThreatListUpdated)
 		events.register("PLAYER_REGEN_ENABLED", onCombatChange)
 		events.register("PLAYER_REGEN_DISABLED", onCombatChange)
 
+		return this
 	end,
 
 }
 
-ns.threatMeter = threatMeter
+ns.features.threat.model = threatMeter
