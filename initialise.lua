@@ -8,6 +8,11 @@ local initialise = function()
 
 	ns.lib = {
 		events = core.events,
+		ui = core.ui,
+		style = core.style,
+		layout = core.layout,
+		fonts = core.fonts,
+		colours = core.colors,
 	}
 
 end

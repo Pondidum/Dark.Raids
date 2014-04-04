@@ -1,10 +1,13 @@
 local addon, ns = ...
 local config = ns.config
 
-local core = Dark.core
-local events = core.events.new()
-local ui = core.ui
-local style = core.style
+local events = ns.lib.events.new()
+local ui = ns.lib.ui
+local style = ns.lib.style
+local layout = ns.lib.layout
+
+local colors.ns.lib.colors
+local fonts = ns.lib.fonts
 
 -- local api
 local NUM_WORLD_RAID_MARKERS = NUM_WORLD_RAID_MARKERS
@@ -24,7 +27,7 @@ local createButton = function(parent, index)
 	button:SetAttribute("macrotext1", "/wm " .. index)
 	button:SetAttribute("macrotext2", "/cwm " .. index)
 
-	button.text = ui.createFont(button, core.fonts.normal, 12)
+	button.text = ui.createFont(button, fonts.normal, 12)
 	button.text:SetAllPoints(button)
 	button.text:SetJustifyH("CENTER")
 
@@ -56,7 +59,7 @@ local markers = {
 		local startingButtonSize = 24
 		container:SetHeight(startingButtonSize)
 
-		core.layout.init(container, {
+		layout.init(container, {
 			marginLeft = 0,
 			marginRight = SPACING,
 			marginTop = 0,
@@ -99,7 +102,7 @@ local markers = {
 					if isActive then
 						mark.bg:SetBackdropColor(unpack(mark.color))
 					else
-						mark.bg:SetBackdropColor(unpack(core.colors.background))
+						mark.bg:SetBackdropColor(unpack(colors.background))
 					end
 
 					mark.active = isActive
