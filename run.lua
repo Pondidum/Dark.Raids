@@ -6,7 +6,6 @@ local events = core.events.new()
 local onLogin = function()
 
 	ns.threatUi.new()
-	ns.cooldowns.new()
 
 	local interrupt = ns.interrupt.new()
 	ns.interruptOptions.new(interrupt)

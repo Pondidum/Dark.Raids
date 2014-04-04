@@ -85,4 +85,8 @@ local cooldowns = {
 	end,
 }
 
-ns.cooldowns = cooldowns
+local runCooldowns = function()
+	events.register("PLAYER_LOGIN", cooldowns.new)
+end
+
+ns.features.cooldowns = runCooldowns
