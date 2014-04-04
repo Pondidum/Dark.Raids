@@ -12,9 +12,11 @@ unitCache.lua
 
 features\interrupt\interrupt.lua
 features\interrupt\interrupt.options.lua
+features\interrupt.lua
 
 features\threat\threatMeter.lua
 features\threat\threatUi.lua
+features\threat.lua
 
 features\markers.lua
 features\cooldowns.lua
