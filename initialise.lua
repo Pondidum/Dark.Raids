@@ -6,17 +6,7 @@ local initialise = function()
 
 	local core = Dark.core
 
-	ns.lib = {
-		events = core.events,
-		ui = core.ui,
-		style = core.style,
-		layout = core.layout,
-		fonts = core.fonts,
-		colours = core.colors,
-		textures = core.textures,
-		slash = core.slash,
-		options = core.options.
-	}
+	ns.lib = setmetatable({ }, { __index = core })
 
 end
 
