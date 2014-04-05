@@ -6,7 +6,7 @@ local ui = ns.lib.ui
 local style = ns.lib.style
 local layout = ns.lib.layout
 
-local colors.ns.lib.colors
+local colors =ns.lib.colors
 local fonts = ns.lib.fonts
 
 -- local api
