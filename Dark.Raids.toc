@@ -21,4 +21,6 @@ features\threat.lua
 features\markers.lua
 features\cooldowns.lua
 features\errorFilter.lua
+features\selfBuffs.lua
+
 run.lua
