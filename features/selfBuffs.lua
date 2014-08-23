@@ -27,9 +27,9 @@ local buffChecker = {
 
 		local checkBuffs = function()
 
-			if UnitAffectingCombat("player") and not UnitInVehicle("player") then
+			if #buffs > 0 and UnitAffectingCombat("player") and not UnitInVehicle("player") then
 
-				for spellID, name in pairs(buffs) do
+				for i, name in ipairs(buffs) do
 
 					if name and UnitBuff("player", name) then
 						frame:Hide()
@@ -60,10 +60,11 @@ local buffChecker = {
 			buffs = {}
 
 			for i, spellID in ipairs(config.buffs[class] or {}) do
-				buffs[spellID] = GetSpellInfo(spellID)
+				local name = GetSpellInfo(spellID)
+				table.insert(buffs, name)
 			end
 
-			for spellID, buffName in pairs(buffs) do
+			for i, buffName in ipairs(buffs) do
 
 				local usable, noMana = IsUsableSpell(buffName)
 
