@@ -27,7 +27,7 @@ local createButton = function(parent, index)
 	button:SetAttribute("macrotext1", "/wm " .. index)
 	button:SetAttribute("macrotext2", "/cwm " .. index)
 
-	button.text = ui.createFont(button, fonts.normal, 12)
+	button.text = ui.createFont(button, fonts.normal, 10)
 	button.text:SetAllPoints(button)
 	button.text:SetJustifyH("CENTER")
 
