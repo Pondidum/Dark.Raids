@@ -39,6 +39,8 @@ local createButton = function(parent, index)
 	button.color = {rgbFromHex(text:sub(i+5, i+10))}
 	button.text:SetText(text:sub(1, i-1))
 
+	button:RegisterForClicks("AnyUp")
+
 	return button
 
 end
@@ -115,19 +117,7 @@ local markers = {
 		local setVisibility = function()
 
 			if IsInGroup() or IsInRaid() then
-
 				container:Show()
-
-				local clicks = nil
-
-				if not IsInRaid() or (UnitIsGroupLeader("player") or UnitIsGroupAssistant("player")) then
-					clicks = "AnyUp"
-				end
-
-				for i, button in ipairs(markers) do
-					button:RegisterForClicks(clicks)
-				end
-
 			else
 				container:Hide()
 			end
