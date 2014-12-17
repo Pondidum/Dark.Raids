@@ -21,8 +21,8 @@ local threatUi = {
 
 		local anchor = DarkRaidWorldMarkers or Minimap
 
-		container:SetPoint("TOPLEFT", anchor, "BOTTOMLEFT", 0, -10)
-		container:SetPoint("TOPRIGHT", anchor, "BOTTOMRIGHT", 0, -10)
+		container:SetPoint("TOPLEFT", anchor, "BOTTOMLEFT", 0, -4)
+		container:SetPoint("TOPRIGHT", anchor, "BOTTOMRIGHT", 0, -4)
 
 		layout.init(container, {
 			type = "STACK",
