@@ -1,92 +1,84 @@
 local addon, ns = ...
 local config = ns.config.cooldowns
 
-local events = ns.lib.events.new()
+local class = ns.lib.class
+local events = ns.lib.events
 
-local cooldowns = {
+local cooldowns = class:extend({
 
-	new = function()
-
-		local playerName = UnitName("player")
-		local specConfig
-
-		local onSpecChanged = function()
-
-			local _, class = UnitClass("player")
-			local specID = GetSpecialization()
-
-			if specID == nil then
-				return
-			end
-
-			local playerSpecID, spec = GetSpecializationInfo(specID)
-
-			if config[class] == nil or config[class][spec] == nil then
-				return
-			end
-
-			specConfig = config[class][spec]
-
-		end
-
-		local onCombatLogUnfiltered = function(self, event, ...)
-
-			if specConfig == nil then
-				return
-			end
-
-			local timestamp, eventType, hideCaster, sourceGuid, sourceName, sourceFlags, sourceRaidFlags, destGuid, destName, destFlags, destRaidFlags, spellID, arg1, arg2, extraskillID = ...
-
-			if sourceName ~= playerName then
-				return
-			end
-
-			if eventType ~= "SPELL_CAST_SUCCESS" then
-				return
-			end
-
-			local message = specConfig[spellID]
-
-			if message == nil then
-				return
-			end
-
-
-			SendChatMessage(string.format(message, arg1), config.channel)
-
-		end
-
-		local this = {}
-
-		this.enable = function()
-
-			onSpecChanged()
-
-			events.register("ACTIVE_TALENT_GROUP_CHANGED", onSpecChanged)
-			events.register("COMBAT_LOG_EVENT_UNFILTERED", onCombatLogUnfiltered)
-
-		end
-
-		this.disable = function()
-
-			events.unregister("PLAYER_LOGIN")
-			events.unregister("ACTIVE_TALENT_GROUP_CHANGED")
-
-			events.unregister("COMBAT_LOG_EVENT_UNFILTERED")
-
-		end
+	ctor = function(self)
+		self:include(events)
 
 		if config.enabled then
-			this.enable()
+			self:enable()
 		end
 
-		return this
+	end,
+
+	enable = function()
+
+		self:ACTIVE_TALENT_GROUP_CHANGED()
+
+		slef:register("ACTIVE_TALENT_GROUP_CHANGED")
+		slef:register("COMBAT_LOG_EVENT_UNFILTERED")
 
 	end,
-}
 
-local runCooldowns = function()
-	events.register("PLAYER_LOGIN", cooldowns.new)
+	disable = function()
+
+		self:unregister("ACTIVE_TALENT_GROUP_CHANGED")
+		self:unregister("COMBAT_LOG_EVENT_UNFILTERED")
+
+	end,
+
+	ACTIVE_TALENT_GROUP_CHANGED = function(self)
+
+		local _, class = UnitClass("player")
+		local specID = GetSpecialization()
+
+		if specID == nil then
+			return
+		end
+
+		local playerSpecID, spec = GetSpecializationInfo(specID)
+
+		if config[class] == nil or config[class][spec] == nil then
+			return
+		end
+
+		self.specConfig = config[class][spec]
+
+	end,
+
+	COMBAT_LOG_EVENT_UNFILTERED = function(self, event, ...)
+
+		if self.specConfig == nil then
+			return
+		end
+
+		local timestamp, eventType, hideCaster, sourceGuid, sourceName, sourceFlags, sourceRaidFlags, destGuid, destName, destFlags, destRaidFlags, spellID, arg1, arg2, extraskillID = ...
+
+		if sourceName ~= playerName then
+			return
+		end
+
+		if eventType ~= "SPELL_CAST_SUCCESS" then
+			return
+		end
+
+		local message = self.specConfig[spellID]
+
+		if message == nil then
+			return
+		end
+
+
+		SendChatMessage(string.format(message, arg1), config.channel)
+
+	end
+
+})
+
+ns.features.cooldowns = function()
+	cooldowns:new()
 end
-
-ns.features.cooldowns = runCooldowns
