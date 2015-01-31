@@ -7,9 +7,12 @@ local initialise = function()
 		interrupt = {},
 	}
 
-	local core = Dark.core
+	local dark = Darker
 
-	ns.lib = setmetatable({ }, { __index = core })
+	ns.lib = {
+		class = dark.class,
+		events = dark.events,
+	}
 
 end
 

@@ -3,7 +3,7 @@
 ## Author: Darkend / DarkStorm / Zenedar / EU
 ## Version: 0.0.1
 ## Notes: Raid Utilities
-## RequiredDeps: Dark.Raids
+## RequiredDeps: Dark
 
 config.lua
 initialise.lua
