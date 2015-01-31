@@ -1,65 +1,51 @@
 local addon, ns = ...
 
 local config = ns.config.errorFilter
-local events = ns.lib.events.new()
 
-local filter = {
+local class = ns.lib.class
+local events = ns.lib.events
 
-	new =  function()
+local filter = class:extend({
 
-		local checkBlacklist = function(message)
-			return config.blacklist[message]
+	ctor = function(self, mode)
+		self:include(events)
+
+		self.check = self[string.lower(mode)]
+	end,
+
+	enable = function(self)
+		UIErrorsFrame:UnregisterEvent('UI_ERROR_MESSAGE')
+		self:register("UI_ERROR_MESSAGE")
+	end,
+
+	disable = function(self)
+		UIErrorsFrame:RegisterEvent('UI_ERROR_MESSAGE')
+		self:unregister("UI_ERROR_MESSAGE")
+	end,
+
+	UI_ERROR_MESSAGE = function(self, eventName, message)
+
+		if self:check(message) then
+			UIErrorsFrame:AddMessage(message, 1.0, 0.1, 0.1, 1.0)
 		end
 
-		local checkWhitelist = function(message)
-			return not config.whitelist[message]
-		end
+	end,
 
-		local check
+	blacklist = function(message)
+		return config.blacklist[message]
+	end,
 
-		local onUIErrorMessage = function(self, event, message)
+	whitelist = function(message)
+		return not config.whitelist[message]
+	end,
 
-			if check(message) then
-				UIErrorsFrame:AddMessage(message, 1.0, 0.1, 0.1, 1.0)
-			end
 
-		end
-
-		local this = {
-
-			setMode = function(mode)
-
-				if mode == "blacklist" then
-					check = checkBlacklist
-				else
-					check = checkWhitelist
-				end
-
-			end,
-
-			enable = function()
-				UIErrorsFrame:UnregisterEvent('UI_ERROR_MESSAGE')
-				events.register("UI_ERROR_MESSAGE", onUIErrorMessage)
-			end,
-
-			disable = function()
-				UIErrorsFrame:RegisterEvent('UI_ERROR_MESSAGE')
-				events.unregister("UI_ERROR_MESSAGE")
-			end,
-
-		}
-
-		return this
-
-	end
-
-}
+})
 
 local runFilter = function()
 
-	local controller = filter.new()
-	controller.setMode(config.mode)
-	controller.enable()
+	local controller = filter:new(config.mode)
+	controller:enable()
 
 end
 
