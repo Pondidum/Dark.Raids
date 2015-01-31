@@ -1,119 +1,74 @@
 local addon, ns = ...
 local config = ns.config.interrupt
 
-local eventStore = ns.lib.events.new()
-local slash = ns.lib.slash
-
 local UnitInParty = UnitInParty
 local UnitInRaid = UnitInRaid
 local GetNumPartyMembers = GetNumPartyMembers
 local SendChatMessage = SendChatMessage
 
-local interrupt = {
+local class = ns.lib.class
+local events = ns.lib.events
 
-	new = function()
+local interrupt = class:extend({
 
-		local playerName = UnitName("player")
+	ctor = function(self)
+		self:include(events)
+		self:register("COMBAT_LOG_EVENT_UNFILTERED")
 
-		local shouldAnnounce = {
-			SAY = function()
-				return true
-			end,
+		self.playerName = UnitName("player")
+	end,
 
-			PARTY = function()
-				return UnitInParty("player") and GetNumPartyMembers() > 0
-			end,
+	shouldAnnounce = {
+		SAY = function()
+			return true
+		end,
 
-			RAID = function()
-				return UnitInRaid("player")
-			end,
-		}
+		PARTY = function()
+			return UnitInParty("player") and GetNumPartyMembers() > 0
+		end,
 
-		local messages = {
+		RAID = function()
+			return UnitInRaid("player")
+		end,
+	},
 
-			SPELL_INTERRUPT = function(targetSpellID, sourceSpellID)
-				return "Interrupted " .. GetSpellLink(targetSpellID) .. "."
-			end,
+	messages = {
 
-			SPELL_STOLEN = function(targetSpellID, sourceSpellID)
-				return "Spellstole " .. GetSpellLink(targetSpellID) .. "."
-			end
-		}
+		SPELL_INTERRUPT = function(targetSpellID, sourceSpellID)
+			return "Interrupted " .. GetSpellLink(targetSpellID) .. "."
+		end,
 
-		local onCombatLogUnfiltered = function(self, event, ...)
+		SPELL_STOLEN = function(targetSpellID, sourceSpellID)
+			return "Spellstole " .. GetSpellLink(targetSpellID) .. "."
+		end
+	},
 
-			local timestamp, eventType, hideCaster, sourceGuid, sourceName, sourceFlags, sourceRaidFlags, destGuid, destName, destFlags, destRaidFlags, spellID, arg1, arg2, extraskillID = ...
+	COMBAT_LOG_EVENT_UNFILTERED = function(self, event, ...)
 
-			if sourceName ~= playerName then
-				return
-			end
+		local timestamp, eventType, hideCaster, sourceGuid, sourceName, sourceFlags, sourceRaidFlags, destGuid, destName, destFlags, destRaidFlags, spellID, arg1, arg2, extraskillID = ...
 
-			if messages[eventType] == nil then
-				return
-			end
-
-			if shouldAnnounce[config.channel] == nil then
-				return
-			end
-
-			local message = messages[eventType](extraskillID, spellID) .. " " .. config.suffix
-
-			SendChatMessage(message, config.channel)
-
-			if config.notify ~= nil and config.notify ~= "" then
-				SendChatMessage(message, "WHISPER", nil, config.notify)
-			end
-
-
+		if sourceName ~= self.playerName then
+			return
 		end
 
-		local this = {
-
-			enable = function()
-				eventStore.register("COMBAT_LOG_EVENT_UNFILTERED", onCombatLogUnfiltered)
-			end,
-
-			disable = function()
-				eventStore.unregister("COMBAT_LOG_EVENT_UNFILTERED")
-			end,
-
-			isEnabled = function()
-				return eventStore.isRegistered("COMBAT_LOG_EVENT_UNFILTERED")
-			end,
-
-			setChannel = function(value)
-				config.channel = string.upper(value)
-			end,
-
-			getChannel = function()
-				return string.upper(config.channel)
-			end,
-
-			setSuffix = function(value)
-				config.suffix = value
-			end,
-
-			getSuffix = function()
-				return config.suffix
-			end,
-
-			setNotify = function(value)
-				config.notify = value
-			end,
-
-			getNotify = function()
-				return config.notify
-			end,
-		}
-
-		if config.enabled then
-			this.enable()
+		if messages[eventType] == nil then
+			return
 		end
 
-		return this
+		if self.shouldAnnounce[config.channel] == nil then
+			return
+		end
 
-	end
+		local message = messages[eventType](extraskillID, spellID) .. " " .. config.suffix
 
-}
+		SendChatMessage(message, config.channel)
+
+		if config.notify ~= nil and config.notify ~= "" then
+			SendChatMessage(message, "WHISPER", nil, config.notify)
+		end
+
+	end,
+
+})
 
 ns.features.interrupt.controller = interrupt

@@ -12,8 +12,7 @@ local run = class:extend({
 
 	PLAYER_LOGIN = function(self)
 
-		local controller = interrupt.controller.new()
-		local options = interrupt.options.register(controller)
+		local controller = interrupt.controller:new()
 
 	end,
 })
