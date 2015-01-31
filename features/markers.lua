@@ -1,13 +1,15 @@
 local addon, ns = ...
 local config = ns.config
 
-local events = ns.lib.events.new()
-local ui = ns.lib.ui
-local style = ns.lib.style
-local layout = ns.lib.layout
+local lib = Dark.core
 
-local colors =ns.lib.colors
-local fonts = ns.lib.fonts
+local events = lib.events.new()
+local ui = lib.ui
+local style = lib.style
+local layout = lib.layout
+
+local colors =lib.colors
+local fonts = lib.fonts
 
 -- local api
 local NUM_WORLD_RAID_MARKERS = NUM_WORLD_RAID_MARKERS

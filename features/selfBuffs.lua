@@ -1,8 +1,10 @@
 local addon, ns = ...
 
-local events = ns.lib.events.new()
-local style = ns.lib.style
-local sounds = ns.lib.sounds
+local lib = Dark.core
+
+local events = lib.events.new()
+local style = lib.style
+local sounds = lib.sounds
 
 local config = ns.config.selfBuffs
 
