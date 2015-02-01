@@ -41,7 +41,7 @@ local threatMeter = class:extend({
 
 	UNIT_THREAT_LIST_UPDATE = function(self)
 
-		local mob = findThreatMob()
+		local mob = self:findThreatMob()
 
 		if mob == nil then
 			return
