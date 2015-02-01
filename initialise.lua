@@ -12,6 +12,7 @@ local initialise = function()
 	ns.lib = {
 		class = dark.class,
 		events = dark.events,
+		layout = dark.layoutEngine,
 	}
 
 end

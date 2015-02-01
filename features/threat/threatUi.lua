@@ -3,9 +3,9 @@ local config = ns.config.threat
 
 local class = ns.lib.class
 local events = ns.lib.events
+local layout = ns.lib.layout
 
 local lib = Dark.core
-local layout = lib.layout
 local style = lib.style
 local ui = lib.ui
 local colors = lib.colors
@@ -15,6 +15,20 @@ local round = function(number, decimals)
 	if not decimals then decimals = 0 end
     return (("%%.%df"):format(decimals)):format(number)
 end
+
+local stickyLayout = layout:extend({
+
+	afterLayout = function(self)
+
+		local container = self.container
+
+		for i, child in ipairs(self.children) do
+			child:SetPoint("LEFT", container, "LEFT")
+			child:SetPoint("RIGHT", container, "RIGHT")
+		end
+	end,
+
+})
 
 local threatUi = {
 
@@ -27,12 +41,12 @@ local threatUi = {
 		container:SetPoint("TOPLEFT", anchor, "BOTTOMLEFT", 0, -4)
 		container:SetPoint("TOPRIGHT", anchor, "BOTTOMRIGHT", 0, -4)
 
-		layout.init(container, {
-			type = "STACK",
+		local engine = stickyLayout:new(container, {
+			layout = "vertical",
 			origin = "TOP",
-			autosize = true,
-			marginTop = config.rowSpacing / 2,
-			marginBottom = config.rowSpacing / 2,
+			wrap = false,
+			autosize = "y",
+			itemSpacing = config.rowSpacing
 		})
 
 		style.addBackground(container)
@@ -72,11 +86,15 @@ local threatUi = {
 			name:SetPoint("RIGHT", value, "LEFT")
 			bar.name = name
 
-			bars[i] = container.add(bar)
+			bars[i] = bar
+			engine:addChild(bar)
 
 		end
 
+		engine:performLayout()
+
 		local onUpdate = function(result)
+
 
 			for i, bar in ipairs(bars) do
 
@@ -102,12 +120,6 @@ local threatUi = {
 					bar:Hide()
 
 				end
-
-			end
-
-			for i, set in ipairs(result) do
-
-				local bar = bars[i]
 
 			end
 
