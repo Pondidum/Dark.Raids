@@ -3,16 +3,28 @@ local config = ns.config
 
 local style = ns.lib.style
 local media = ns.lib.media
-
-
-local lib = Dark.core
-local layout = lib.layout
+local layout = ns.lib.layout
 
 -- local api
 local NUM_WORLD_RAID_MARKERS = NUM_WORLD_RAID_MARKERS
 local IsRaidMarkerActive = IsRaidMarkerActive
 
 local SPACING = 4
+
+local scalingLayout = layout:extend({
+
+	afterLayout = function(self)
+
+		for i, child in ipairs(self.children) do
+			child:SetSize(self.childSize, self.childSize)
+		end
+
+	end,
+
+	setChildSize = function(self, value)
+		self.childSize = value
+	end,
+})
 
 local markers = ns.lib.class:extend({
 
@@ -68,24 +80,23 @@ local markers = ns.lib.class:extend({
 		local startingButtonSize = 24
 		container:SetHeight(startingButtonSize)
 
-		layout.init(container, {
-			marginLeft = 0,
-			marginRight = SPACING,
-			marginTop = 0,
-			marginBottom = 0,
-			paddingLeft = 0,
-			paddingRight = 0,
-			paddingTop = 0,
-			paddingBottom = 0,
-			defaultChildWidth = startingButtonSize,
-			defaultChildHeight = startingButtonSize,
-			forceChildSize = true,
+		local engine = scalingLayout:new(container, {
+			layout = "horizontal",
+			origin = "LEFT",
+			wrap = false,
+			autosize = "none",
+			itemSpacing = SPACING
 		})
 
+		engine:setChildSize(startingButtonSize)
 
 		for i = 1, NUM_WORLD_RAID_MARKERS do
-			markers[i] = container.add(self:createButton(i))
+			local button = self:createButton(i)
+			markers[i] = button
+			engine:addChild(button)
 		end
+
+		engine:performLayout()
 
 		MinimapCluster:SetScript("OnSizeChanged", function(self, width, h)
 
@@ -94,10 +105,9 @@ local markers = ns.lib.class:extend({
 			local newSize = (width - (numSpacers * SPACING)) / NUM_WORLD_RAID_MARKERS
 
 			container:SetHeight(newSize)
-			container.layout.defaultChildHeight = newSize
-			container.layout.defaultChildWidth = newSize
+			engine:setChildSize(newSize)
 
-			container.performLayout()
+			engine:performLayout()
 
 		end)
 
