@@ -1,61 +1,66 @@
 local addon, ns = ...
 local config = ns.config
 
+local style = ns.lib.style
+local media = ns.lib.media
+
+
 local lib = Dark.core
-
-local events = lib.events.new()
-local ui = lib.ui
-local style = lib.style
 local layout = lib.layout
-
-local colors =lib.colors
-local fonts = lib.fonts
 
 -- local api
 local NUM_WORLD_RAID_MARKERS = NUM_WORLD_RAID_MARKERS
 local IsRaidMarkerActive = IsRaidMarkerActive
 
-
-local rgbFromHex = function(hex)
-	local rhex, ghex, bhex = string.sub(hex, 1, 2), string.sub(hex, 3, 4), string.sub(hex, 5, 6)
-	return tonumber(rhex, 16) / 255, tonumber(ghex, 16) / 255, tonumber(bhex, 16) / 255
-end
-
-local createButton = function(parent, index)
-
-	local button = CreateFrame("Button", "DarkRaidWorldMarkers"..index, parent, "ActionButtonTemplate, SecureActionButtonTemplate")
-
-	button:SetAttribute("type", "macro")
-	button:SetAttribute("macrotext1", "/wm " .. index)
-	button:SetAttribute("macrotext2", "/cwm " .. index)
-
-	button.text = ui.createFont(button, fonts.normal, 10)
-	button.text:SetAllPoints(button)
-	button.text:SetJustifyH("CENTER")
-
-	style.actionButton(button)
-
-	local text = _G["WORLD_MARKER" .. index]
-	local i = text:find(" |cff")
-
-	button.color = {rgbFromHex(text:sub(i+5, i+10))}
-	button.text:SetText(text:sub(1, i-1))
-
-	button:RegisterForClicks("AnyUp")
-
-	return button
-
-end
-
-
 local SPACING = 4
 
-local markers = {
+local markers = ns.lib.class:extend({
 
-	new = function()
+	ctor = function(self)
+		self:include(ns.lib.events)
+		self:include(ns.lib.mixins.updates)
 
-		local markers = {}
+		self:createUI()
+
+		self:register("PARTY_LEADER_CHANGED")
+		self:register("PLAYER_ENTERING_WORLD")
+	end,
+
+	PARTY_LEADER_CHANGED = function(self)
+		self:setVisibility()
+	end,
+
+	PLAYER_ENTERING_WORLD = function(self)
+		self:setVisibility()
+	end,
+
+	onUpdate = function(self)
+
+		for i, mark in ipairs(self.markers) do
+
+			local isActive = IsRaidMarkerActive(i)
+
+			if mark.active ~= isActive then
+
+				if isActive then
+					mark.bg:SetBackdropColor(unpack(mark.color))
+				else
+					mark.bg:SetBackdropColor(unpack(media.colors.background))
+				end
+
+				mark.active = isActive
+			end
+		end
+
+	end,
+
+	createUI = function(self)
+
 		local container = CreateFrame("Frame", "DarkRaidWorldMarkers", UIParent)
+		local markers = {}
+
+		self.container = container
+		self.markers = markers
 
 		container:SetPoint("TOPLEFT", MinimapCluster, "BOTTOMLEFT", 0, -5)
 		container:SetPoint("TOPRIGHT", MinimapCluster, "BOTTOMRIGHT", 0, -5)
@@ -77,8 +82,9 @@ local markers = {
 			forceChildSize = true,
 		})
 
+
 		for i = 1, NUM_WORLD_RAID_MARKERS do
-			markers[i] = container.add(createButton(container, i))
+			markers[i] = container.add(self:createButton(i))
 		end
 
 		MinimapCluster:SetScript("OnSizeChanged", function(self, width, h)
@@ -95,43 +101,51 @@ local markers = {
 
 		end)
 
-		local onUpdate = function()
-
-			for i, mark in ipairs(markers) do
-
-				local isActive = IsRaidMarkerActive(i)
-
-				if mark.active ~= isActive then
-
-					if isActive then
-						mark.bg:SetBackdropColor(unpack(mark.color))
-					else
-						mark.bg:SetBackdropColor(unpack(colors.background))
-					end
-
-					mark.active = isActive
-				end
-			end
-
-		end
-
-
-		local setVisibility = function()
-
-			if IsInGroup() or IsInRaid() then
-				container:Show()
-			else
-				container:Hide()
-			end
-
-		end
-
-		events.register("PARTY_LEADER_CHANGED", setVisibility)
-		events.register("PLAYER_ENTERING_WORLD", setVisibility)
-		events.registerOnUpdate(onUpdate)
 
 	end,
 
-}
+ 	createButton = function(self, index)
 
-ns.features.markers = markers.new
+		local button = CreateFrame("Button", "DarkRaidWorldMarkers"..index, self.container, "ActionButtonTemplate, SecureActionButtonTemplate")
+
+		button:SetAttribute("type", "macro")
+		button:SetAttribute("macrotext1", "/wm " .. index)
+		button:SetAttribute("macrotext2", "/cwm " .. index)
+
+		button.text = media.fonts:create(button, nil, 10)
+		button.text:SetAllPoints(button)
+		button.text:SetJustifyH("CENTER")
+
+		style:actionButton(button)
+
+		local text = _G["WORLD_MARKER" .. index]
+		local i = text:find(" |cff")
+
+		button.color = {self:rgbFromHex(text:sub(i + 5, i + 10))}
+		button.text:SetText(text:sub(1, i-1))
+
+		button:RegisterForClicks("AnyUp")
+
+		return button
+
+	end,
+
+	rgbFromHex = function(self, hex)
+		local rhex, ghex, bhex = string.sub(hex, 1, 2), string.sub(hex, 3, 4), string.sub(hex, 5, 6)
+		return tonumber(rhex, 16) / 255, tonumber(ghex, 16) / 255, tonumber(bhex, 16) / 255
+	end,
+
+	setVisibility = function(self)
+
+		if IsInGroup() or IsInRaid() then
+			self.container:Show()
+		else
+			self.container:Hide()
+		end
+	end,
+
+})
+
+ns.features.markers = function()
+	return markers:new()
+end
