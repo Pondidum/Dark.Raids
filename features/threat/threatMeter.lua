@@ -22,7 +22,7 @@ local threatMeter = class:extend({
 		self.threatUnitIDFindList = {"target", "targettarget"}
 		self.threatTable = {}
 		self.threatSort = function(a, b)
-			return threatTable[a] > threatTable[b]
+			return self.threatTable[a] > self.threatTable[b]
 		end
 	end,
 
@@ -54,7 +54,7 @@ local threatMeter = class:extend({
 
 		self:gatherThreatData(mob)
 
-		local sortTable = getSortTable()
+		local sortTable = self:getSortTable()
 
 		local result = {}
 
@@ -62,7 +62,7 @@ local threatMeter = class:extend({
 			result[i] = {rank = i, name = self.units.names[guid], value = self.threatTable[guid]}
 		end
 
-		this.onThreatUpdate(result)
+		self.onThreatUpdate(result)
 
 	end,
 
@@ -83,13 +83,13 @@ local threatMeter = class:extend({
 		if self.inParty or self.inRaid then
 			if self.inRaid then
 				for i = 1, GetNumGroupMembers() do
-					self:updateThreat(units.raid[i], mob)
-					self:updateThreat(units.raidPets[i], mob)
+					self:updateThreat(self.units.raid[i], mob)
+					self:updateThreat(self.units.raidPets[i], mob)
 				end
 			else
 				for i = 1, GetNumSubgroupMembers() do
-					self:updateThreat(units.party[i], mob)
-					self:updateThreat(units.partyPets[i], mob)
+					self:updateThreat(self.units.party[i], mob)
+					self:updateThreat(self.units.partyPets[i], mob)
 				end
 			end
 
@@ -120,7 +120,7 @@ local threatMeter = class:extend({
 			return
 		end
 
-		units.names[unitGuid] = UnitName(unitID)
+		self.units.names[unitGuid] = UnitName(unitID)
 
 		local isTanking, status, scaledPercent, rawPercent, threatValue = UnitDetailedThreatSituation(unitID, mobUnitID)
 		local useValue = scaledPercent
