@@ -1,12 +1,15 @@
 local addon, ns = ...
 local config = ns.config.threat
 
-local events = ns.lib.events.new()
-local layout = ns.lib.layout
-local style = ns.lib.style
-local ui = ns.lib.ui
-local colors = ns.lib.colors
-local textures = ns.lib.textures
+local class = ns.lib.class
+local events = ns.lib.events
+
+local lib = Dark.core
+local layout = lib.layout
+local style = lib.style
+local ui = lib.ui
+local colors = lib.colors
+local textures = lib.textures
 
 local round = function(number, decimals)
 	if not decimals then decimals = 0 end
@@ -37,16 +40,10 @@ local threatUi = {
 
 		if config.toggleOnCombat then
 
-			local onEnterCombat = function()
-				container:Show()
-			end
-
-			local onExitCombat = function()
-				container:Hide()
-			end
-
-			events.register("PLAYER_REGEN_DISABLED", onEnterCombat)
-			events.register("PLAYER_REGEN_ENABLED", onExitCombat)
+			local toggle = events:new({
+				PLAYER_REGEN_DISABLED = function() container:Show() end,
+				PLAYER_REGEN_ENABLED = function() container:Hide() end,
+			})
 
 			if not InCombatLockdown() then
 				onExitCombat()

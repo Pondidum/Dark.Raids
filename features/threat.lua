@@ -3,7 +3,7 @@ local addon, ns = ...
 local class = ns.lib.class
 local events = ns.lib.events
 
-local run = class:events({
+local run = class:extend({
 
 	ctor = function(self)
 		self:include(events)
