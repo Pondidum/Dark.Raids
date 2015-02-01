@@ -12,19 +12,6 @@ local round = function(number, decimals)
     return (("%%.%df"):format(decimals)):format(number)
 end
 
-local createFont = function(parent)
-
-	local fs = parent:CreateFontString(nil, "OVERLAY")
-
-	fs:SetFont(media.fonts.normal, 12)
-	fs:SetJustifyH("LEFT")
-	fs:SetShadowColor(0, 0, 0)
-	fs:SetShadowOffset(1.25, -1.25)
-
-	return fs
-
-end
-
 local stickyLayout = layout:extend({
 
 	afterLayout = function(self)
@@ -82,13 +69,13 @@ local threatUi = {
 			bar:SetHeight(config.rowHeight)
 			bar:SetMinMaxValues(0, 100)
 
-			local value = createFont(bar)
+			local value = media.fonts:create(bar)
 			value:SetPoint("TOPRIGHT", bar, "TOPRIGHT")
 			value:SetPoint("BOTTOMRIGHT", bar, "BOTTOMRIGHT")
 			value:SetWidth(40)
 			bar.value = value
 
-			local name = createFont(bar)
+			local name = media.fonts:create(bar)
 			name:SetPoint("TOPLEFT", bar, "TOPLEFT")
 			name:SetPoint("BOTTOMLEFT", bar, "BOTTOMLEFT")
 			name:SetPoint("RIGHT", value, "LEFT")
