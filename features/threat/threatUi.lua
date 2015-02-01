@@ -46,7 +46,7 @@ local threatUi = {
 			})
 
 			if not InCombatLockdown() then
-				onExitCombat()
+				toggle:PLAYER_REGEN_ENABLED()
 			end
 
 		end
