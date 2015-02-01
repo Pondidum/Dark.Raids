@@ -15,16 +15,16 @@ local cooldowns = class:extend({
 
 	end,
 
-	enable = function()
+	enable = function(self)
 
 		self:ACTIVE_TALENT_GROUP_CHANGED()
 
-		slef:register("ACTIVE_TALENT_GROUP_CHANGED")
-		slef:register("COMBAT_LOG_EVENT_UNFILTERED")
+		self:register("ACTIVE_TALENT_GROUP_CHANGED")
+		self:register("COMBAT_LOG_EVENT_UNFILTERED")
 
 	end,
 
-	disable = function()
+	disable = function(self)
 
 		self:unregister("ACTIVE_TALENT_GROUP_CHANGED")
 		self:unregister("COMBAT_LOG_EVENT_UNFILTERED")
