@@ -4,16 +4,25 @@ local config = ns.config.threat
 local class = ns.lib.class
 local events = ns.lib.events
 local layout = ns.lib.layout
-
-local lib = Dark.core
-local style = lib.style
-local ui = lib.ui
-local colors = lib.colors
-local textures = lib.textures
+local style = ns.lib.style
+local media = ns.lib.media
 
 local round = function(number, decimals)
 	if not decimals then decimals = 0 end
     return (("%%.%df"):format(decimals)):format(number)
+end
+
+local createFont = function(parent)
+
+	local fs = parent:CreateFontString(nil, "OVERLAY")
+
+	fs:SetFont(media.fonts.normal, 12)
+	fs:SetJustifyH("LEFT")
+	fs:SetShadowColor(0, 0, 0)
+	fs:SetShadowOffset(1.25, -1.25)
+
+	return fs
+
 end
 
 local stickyLayout = layout:extend({
@@ -49,8 +58,7 @@ local threatUi = {
 			itemSpacing = config.rowSpacing
 		})
 
-		style.addBackground(container)
-		style.addShadow(container)
+		style:frame(container)
 
 		if config.toggleOnCombat then
 
@@ -70,17 +78,17 @@ local threatUi = {
 		for i = 1, config.rowCount do
 
 			local bar = CreateFrame("StatusBar", "DarkuiRaidsThreat"..i, container)
-			bar:SetStatusBarTexture(textures.normal)
+			bar:SetStatusBarTexture(media.textures.normal)
 			bar:SetHeight(config.rowHeight)
 			bar:SetMinMaxValues(0, 100)
 
-			local value = ui.createFont(bar)
+			local value = createFont(bar)
 			value:SetPoint("TOPRIGHT", bar, "TOPRIGHT")
 			value:SetPoint("BOTTOMRIGHT", bar, "BOTTOMRIGHT")
 			value:SetWidth(40)
 			bar.value = value
 
-			local name = ui.createFont(bar)
+			local name = createFont(bar)
 			name:SetPoint("TOPLEFT", bar, "TOPLEFT")
 			name:SetPoint("BOTTOMLEFT", bar, "BOTTOMLEFT")
 			name:SetPoint("RIGHT", value, "LEFT")
@@ -103,7 +111,7 @@ local threatUi = {
 				if set then
 
 					local class, classConst = UnitClass(set.name)
-					local color = colors.class[classConst] or {0.5, 0.5, 0.5}
+					local color = media.colors.class[classConst] or {0.5, 0.5, 0.5}
 
 					if not color then
 						print(set.name, classConst)

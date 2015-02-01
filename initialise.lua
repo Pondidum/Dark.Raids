@@ -13,6 +13,8 @@ local initialise = function()
 		class = dark.class,
 		events = dark.events,
 		layout = dark.layoutEngine,
+		style = dark.style,
+		media = dark.media,
 	}
 
 end
