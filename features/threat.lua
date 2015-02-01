@@ -14,7 +14,7 @@ local run = class:events({
 
 		local threat = ns.features.threat
 		local cache = ns.unitCache.new()
-		local model = threat.model.new(cache)
+		local model = threat.model:new(cache)
 		local ui = threat.ui.new(model)
 
 	end,
