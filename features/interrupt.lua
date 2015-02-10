@@ -43,7 +43,7 @@ local interrupt = class:extend({
 		end
 	},
 
-	COMBAT_LOG_EVENT_UNFILTERED = function(self, event, ...)
+	COMBAT_LOG_EVENT_UNFILTERED = function(self, ...)
 
 		local timestamp, eventType, hideCaster, sourceGuid, sourceName, sourceFlags, sourceRaidFlags, destGuid, destName, destFlags, destRaidFlags, spellID, arg1, arg2, extraskillID = ...
 
@@ -51,7 +51,7 @@ local interrupt = class:extend({
 			return
 		end
 
-		if messages[eventType] == nil then
+		if self.messages[eventType] == nil then
 			return
 		end
 
@@ -59,7 +59,7 @@ local interrupt = class:extend({
 			return
 		end
 
-		local message = messages[eventType](extraskillID, spellID) .. " " .. config.suffix
+		local message = self.messages[eventType](extraskillID, spellID) .. " " .. config.suffix
 
 		SendChatMessage(message, config.channel)
 
