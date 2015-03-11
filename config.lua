@@ -13,7 +13,7 @@ local config = {
 	interrupt = {
 		enabled = true,
 		channel = "SAY",
-		suffix = "",
+		suffix = "Xynk Next",
 		notify = "",
 	},
 
@@ -21,13 +21,6 @@ local config = {
 	cooldowns = {
 		enabled = true,
 		channel = "yell",
-
-		SHAMAN = {
-			["Enhancement"] = {
-				[120668] = "%s Up.", -- stormlash
-				[108280] = "%s Up.", -- healing tide
-			},
-		},
 	},
 
 	errorFilter = {
