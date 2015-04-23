@@ -47,14 +47,6 @@ local config = {
 				6673, -- battle Shout
 				93435, -- roar of courage (hunter pet)
 			},
-			HUNTER = {
-				13165, 	-- hawk
-				5118, 	-- cheetah
-				13159, 	-- pack
-				20043, 	-- wild
-				82661, 	-- fox
-				109260,	-- iron hawk
-			},
 			MAGE = {
 				7302, -- frost armor
 				6117, -- mage armor
