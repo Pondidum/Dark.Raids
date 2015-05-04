@@ -116,7 +116,7 @@ local markers = ns.lib.class:extend({
 
  	createButton = function(self, index)
 
-		local button = CreateFrame("Button", "DarkRaidWorldMarkers"..index, self.container, "ActionButtonTemplate, SecureActionButtonTemplate")
+		local button = CreateFrame("CheckButton", "DarkRaidWorldMarkers"..index, self.container, "ActionButtonTemplate, SecureActionButtonTemplate")
 
 		button:SetAttribute("type", "macro")
 		button:SetAttribute("macrotext1", "/wm " .. index)
