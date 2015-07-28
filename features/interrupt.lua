@@ -1,5 +1,6 @@
 local addon, ns = ...
 local config = ns.config.interrupt
+local options = ns.lib.options
 
 local UnitInParty = UnitInParty
 local UnitInRaid = UnitInRaid
@@ -16,6 +17,22 @@ local interrupt = class:extend({
 		self:register("COMBAT_LOG_EVENT_UNFILTERED")
 
 		self.playerName = UnitName("player")
+		self:registerOptions()
+	end,
+
+	registerOptions = function(self)
+
+		options:addPanel("Interrupt", function(control)
+
+			return {
+				control:input(config, "enabled", "boolean"),
+				control:input(config, "channel", "text"),
+				control:input(config, "suffix", "text"),
+				control:input(config, "notify", "text")
+		    }
+
+		end)
+
 	end,
 
 	shouldAnnounce = {

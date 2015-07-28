@@ -4,6 +4,7 @@
 ## Version: 0.0.1
 ## Notes: Raid Utilities
 ## RequiredDeps: Dark
+## OptionalDeps: Dark.Config
 
 config.lua
 initialise.lua

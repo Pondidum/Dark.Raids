@@ -16,6 +16,7 @@ local initialise = function()
 		layout = dark.layoutEngine,
 		style = dark.style,
 		media = dark.media,
+		options = dark.options
 	}
 
 end
