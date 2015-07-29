@@ -16,7 +16,7 @@ local initialise = function()
 		layout = dark.layoutEngine,
 		style = dark.style,
 		media = dark.media,
-		options = dark.options
+		options = dark.options or { addPanel = function() end }
 	}
 
 end
